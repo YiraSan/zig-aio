@@ -16,6 +16,7 @@ pub const Semaphore = struct {
 
     pub fn lock(self: *@This()) Error!void {
         if (Frame.current()) |frame| {
+            if (self.counter == 0) return;
             if (frame.canceled) return error.Canceled;
             self.counter += 1;
             self.waiters.prepend(&frame.wait_link);
